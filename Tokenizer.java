@@ -25,6 +25,7 @@ public class Tokenizer {
         Tokenizer tokenizer = new Tokenizer();
         tokenizer.tokenize(Dir);
         tokenizer.printTokenFrequencies(tokenizer.tokenFrequency);
+        System.out.println("Tokenization complete. Total tokens: " + tokenizer.tokenFrequency.size());
 
     }
 
@@ -54,9 +55,10 @@ public class Tokenizer {
                 BufferedReader br = new BufferedReader(new FileReader(file));
                 while ((line = br.readLine()) != null) {
                     // Convert to lowercase, remove punctuation, and split into tokens using regex.
-                    String[] tokens = line.toLowerCase().replaceAll("[^a-zA-Z0-9\\s]+", "").split("");
+                    String[] tokens = line.toLowerCase().replaceAll("[^a-zA-Z0-9\\s]+", "").split(" ");
                     for (String token : tokens) {
-                        if(!token.isEmpty()) {
+                        token = Stemm(token);
+                        if (!token.isEmpty()) {
                             tokenFrequency.put(token, tokenFrequency.getOrDefault(token, 0) + 1);
                         }
                     }
@@ -67,4 +69,19 @@ public class Tokenizer {
                 tokenize(file);
             }
         }
-}}
+    }
+    
+    // method to stem the tokens by removing common suffixes i.e ing, es, ed, s
+
+    private String Stemm(String word) {
+        if (word.endsWith("ing") && word.length() > 5)
+            return word.substring(0, word.length() - 3);
+        if (word.endsWith("es") && word.length() > 4)
+            return word.substring(0, word.length() - 2);
+        if (word.endsWith("ed") && word.length() > 4)
+            return word.substring(0, word.length() - 2);
+        if (word.endsWith("s") && word.length() > 3 && !word.endsWith("ss"))
+            return word.substring(0, word.length() - 1);
+        return word;
+    }
+}
