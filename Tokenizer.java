@@ -2,13 +2,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.LinkedHashMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Tokenizer {
     private static HashMap<String, Integer> tokenFrequency = new HashMap<>();
+    private static HashSet<String> englishWords = new HashSet<>();
 
     public static void main(String[] args) throws IOException {
         /* checks arg length to ensure an argumement is provided */
@@ -24,6 +23,8 @@ public class Tokenizer {
             return;
         }
 
+        loadDict("words_alpha.txt");
+
         Tokenizer tokenizer = new Tokenizer();
         double startTime = System.currentTimeMillis();
         tokenizer.tokenize(Dir);
@@ -31,6 +32,19 @@ public class Tokenizer {
         tokenizer.printTokenFrequencies(Tokenizer.tokenFrequency);
         double endTime = System.currentTimeMillis();
         System.out.println("Tokenization time: " + ((endTime - startTime)/1000.0) + " s");
+
+    }
+
+    private static void loadDict(String path) throws IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader(path));
+
+        String line;
+        while ((line = br.readLine()) != null) {
+            englishWords.add(line.trim().toLowerCase());
+        }
+
+        br.close();
 
     }
 
@@ -71,10 +85,10 @@ public class Tokenizer {
                 BufferedReader br = new BufferedReader(new FileReader(file));
                 while ((line = br.readLine()) != null) {
                     // Convert to lowercase, remove punctuation, and split into tokens using regex.
-                    String[] tokens = line.toLowerCase().replaceAll("[^a-zA-Z0-9\s]+", "").split(" ");
+                    String[] tokens = line.toLowerCase().replaceAll("[^a-zA-Z0-9\s]+", "").split("\\s+");
                     for (String token : tokens) {
                         token = Stemm(token);
-                        if (!token.isEmpty()) {
+                        if (!token.isEmpty() && englishWords.contains(token)) {
                             tokenFrequency.put(token, tokenFrequency.getOrDefault(token, 0) + 1);
                         }
                     }
@@ -90,7 +104,7 @@ public class Tokenizer {
     // method to prune tokens by removing tokens that are too common, too rare, contain numbers, or are too short/long
 
     private static HashMap<String, Integer> pruneTokens(HashMap<String, Integer> tokenFrequency) {
-        tokenFrequency.entrySet().removeIf(entry -> entry.getValue() < 5 || entry.getValue() > 7 || entry.getKey().matches(".*[0-9].*") || entry.getKey().length() < 3 || entry.getKey().length() > 15);
+        tokenFrequency.entrySet().removeIf(entry -> entry.getValue() < 2 || entry.getValue() > 10000 || entry.getKey().matches(".*[0-9].*") || entry.getKey().length() < 3 || entry.getKey().length() > 20);
         return tokenFrequency;
     }
 
