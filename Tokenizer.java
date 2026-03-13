@@ -23,7 +23,7 @@ public class Tokenizer {
             return;
         }
 
-        loadDict("words_alpha.txt");
+        loadDict("words.txt");
 
         Tokenizer tokenizer = new Tokenizer();
         double startTime = System.currentTimeMillis();
@@ -32,7 +32,23 @@ public class Tokenizer {
         tokenizer.printTokenFrequencies(Tokenizer.tokenFrequency);
         double endTime = System.currentTimeMillis();
         System.out.println("Tokenization time: " + ((endTime - startTime)/1000.0) + " s");
+        Tokenizer.writeTokensToFile(tokenFrequency, "token_frequencies.txt");
+    }
 
+    private static void writeTokensToFile(HashMap<String,Integer> tokenFrequency2, String string) {
+        try {
+            File file = new File(string);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            Formatter formatter = new Formatter(file);
+            tokenFrequency2.entrySet().stream().forEach(entry -> {
+                formatter.format("%s: %d%n", entry.getKey(), entry.getValue());
+            });
+            formatter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void loadDict(String path) throws IOException {
@@ -85,7 +101,7 @@ public class Tokenizer {
                 BufferedReader br = new BufferedReader(new FileReader(file));
                 while ((line = br.readLine()) != null) {
                     // Convert to lowercase, remove punctuation, and split into tokens using regex.
-                    String[] tokens = line.toLowerCase().replaceAll("[^a-zA-Z0-9\s]+", "").split("\\s+");
+                    String[] tokens = line.toLowerCase().split("\\s+");
                     for (String token : tokens) {
                         token = Stemm(token);
                         if (!token.isEmpty() && englishWords.contains(token)) {
@@ -104,7 +120,7 @@ public class Tokenizer {
     // method to prune tokens by removing tokens that are too common, too rare, contain numbers, or are too short/long
 
     private static HashMap<String, Integer> pruneTokens(HashMap<String, Integer> tokenFrequency) {
-        tokenFrequency.entrySet().removeIf(entry -> entry.getValue() < 2 || entry.getValue() > 10000 || entry.getKey().matches(".*[0-9].*") || entry.getKey().length() < 3 || entry.getKey().length() > 20);
+        tokenFrequency.entrySet().removeIf(entry -> entry.getValue() < 2 || entry.getValue() > 10000 || entry.getKey().length() < 2 || entry.getKey().length() > 20);
         return tokenFrequency;
     }
 
