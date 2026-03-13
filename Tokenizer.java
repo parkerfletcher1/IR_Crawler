@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 public class Tokenizer {
     private static HashMap<String, Integer> tokenFrequency = new HashMap<>();
     private static HashSet<String> englishWords = new HashSet<>();
+    private static Map<String, Integer> sortedTokenFrequency;
 
     public static void main(String[] args) throws IOException {
         /* checks arg length to ensure an argumement is provided */
@@ -31,18 +32,18 @@ public class Tokenizer {
         pruneTokens(tokenFrequency);
         tokenizer.printTokenFrequencies(Tokenizer.tokenFrequency);
         double endTime = System.currentTimeMillis();
-        System.out.println("Tokenization time: " + ((endTime - startTime)/1000.0) + " s");
-        Tokenizer.writeTokensToFile(tokenFrequency, "token_frequencies.txt");
+        System.out.println("Tokenization time: " + ((endTime - startTime) / 1000.0) + " s");
+        Tokenizer.writeTokensToFile(sortedTokenFrequency, "token_frequencies.txt");
     }
 
-    private static void writeTokensToFile(HashMap<String,Integer> tokenFrequency2, String string) {
+    private static void writeTokensToFile(Map<String,Integer> sortedTokenFrequency2, String string) {
         try {
             File file = new File(string);
             if (!file.exists()) {
                 file.createNewFile();
             }
             Formatter formatter = new Formatter(file);
-            tokenFrequency2.entrySet().stream().forEach(entry -> {
+            sortedTokenFrequency2.entrySet().stream().forEach(entry -> {
                 formatter.format("%s: %d%n", entry.getKey(), entry.getValue());
             });
             formatter.close();
@@ -67,7 +68,7 @@ public class Tokenizer {
     // method to print the token frequencies
     private void printTokenFrequencies(HashMap<String, Integer> tokenFrequency) {
 
-        Map<String, Integer> sortedTokenFrequency = tokenFrequency.entrySet()
+        sortedTokenFrequency = tokenFrequency.entrySet()
                 .stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .collect(Collectors.toMap(
@@ -76,7 +77,6 @@ public class Tokenizer {
                         (e1, e2) -> e1,
                         LinkedHashMap::new));
 
-        
         sortedTokenFrequency.entrySet().stream().forEach(entry -> {
             System.out.printf("%s: %d%n", entry.getKey(), entry.getValue());
         });
@@ -117,10 +117,12 @@ public class Tokenizer {
         }
     }
 
-    // method to prune tokens by removing tokens that are too common, too rare, contain numbers, or are too short/long
+    // method to prune tokens by removing tokens that are too common, too rare,
+    // contain numbers, or are too short/long
 
     private static HashMap<String, Integer> pruneTokens(HashMap<String, Integer> tokenFrequency) {
-        tokenFrequency.entrySet().removeIf(entry -> entry.getValue() < 2 || entry.getValue() > 10000 || entry.getKey().length() < 2 || entry.getKey().length() > 20);
+        tokenFrequency.entrySet().removeIf(entry -> entry.getValue() < 2 || entry.getValue() > 10000
+                || entry.getKey().length() < 2 || entry.getKey().length() > 20);
         return tokenFrequency;
     }
 
