@@ -1,9 +1,9 @@
-and: 5
-down: 2
-fix: 2
-budget: 2
-include: 2
-cost: 2
-sav: 2
-variable: 2
-debt: 2
+and: 5 (RTF: 0.238095)
+down: 2 (RTF: 0.095238)
+fix: 2 (RTF: 0.095238)
+budget: 2 (RTF: 0.095238)
+include: 2 (RTF: 0.095238)
+cost: 2 (RTF: 0.095238)
+sav: 2 (RTF: 0.095238)
+variable: 2 (RTF: 0.095238)
+debt: 2 (RTF: 0.095238)

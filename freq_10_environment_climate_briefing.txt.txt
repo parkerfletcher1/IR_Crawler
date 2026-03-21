@@ -1,4 +1,4 @@
-and: 7
-heat: 2
-in: 2
-renewable: 2
+and: 7 (RTF: 0.538462)
+heat: 2 (RTF: 0.153846)
+in: 2 (RTF: 0.153846)
+renewable: 2 (RTF: 0.153846)

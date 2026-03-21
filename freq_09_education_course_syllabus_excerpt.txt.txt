@@ -1,5 +1,5 @@
-and: 6
-course: 3
-the: 3
-are: 2
-final: 2
+and: 6 (RTF: 0.375000)
+course: 3 (RTF: 0.187500)
+the: 3 (RTF: 0.187500)
+are: 2 (RTF: 0.125000)
+final: 2 (RTF: 0.125000)

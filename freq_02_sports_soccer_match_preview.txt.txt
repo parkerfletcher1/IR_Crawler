@@ -1,5 +1,5 @@
-the: 9
-and: 4
-corner: 2
-side: 2
-match: 2
+the: 9 (RTF: 0.473684)
+and: 4 (RTF: 0.210526)
+corner: 2 (RTF: 0.105263)
+side: 2 (RTF: 0.105263)
+match: 2 (RTF: 0.105263)

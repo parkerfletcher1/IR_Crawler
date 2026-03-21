@@ -1,4 +1,4 @@
-and: 3
-but: 2
-for: 2
-the: 2
+and: 3 (RTF: 0.333333)
+but: 2 (RTF: 0.222222)
+for: 2 (RTF: 0.222222)
+the: 2 (RTF: 0.222222)

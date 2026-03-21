@@ -1,6 +1,6 @@
-and: 7
-day: 3
-then: 2
-the: 2
-at: 2
-travel: 2
+and: 7 (RTF: 0.388889)
+day: 3 (RTF: 0.166667)
+then: 2 (RTF: 0.111111)
+the: 2 (RTF: 0.111111)
+at: 2 (RTF: 0.111111)
+travel: 2 (RTF: 0.111111)

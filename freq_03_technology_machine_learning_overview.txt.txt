@@ -1,10 +1,10 @@
-and: 8
-data: 4
-learn: 3
-use: 2
-model: 2
-train: 2
-pattern: 2
-on: 2
-machine: 2
-to: 2
+and: 8 (RTF: 0.275862)
+data: 4 (RTF: 0.137931)
+learn: 3 (RTF: 0.103448)
+use: 2 (RTF: 0.068966)
+model: 2 (RTF: 0.068966)
+train: 2 (RTF: 0.068966)
+pattern: 2 (RTF: 0.068966)
+on: 2 (RTF: 0.068966)
+machine: 2 (RTF: 0.068966)
+to: 2 (RTF: 0.068966)

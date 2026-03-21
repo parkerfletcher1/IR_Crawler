@@ -1,7 +1,7 @@
-the: 14
-and: 7
-in: 2
-game: 2
-ball: 2
-team: 2
-to: 2
+the: 14 (RTF: 0.451613)
+and: 7 (RTF: 0.225806)
+in: 2 (RTF: 0.064516)
+game: 2 (RTF: 0.064516)
+ball: 2 (RTF: 0.064516)
+team: 2 (RTF: 0.064516)
+to: 2 (RTF: 0.064516)

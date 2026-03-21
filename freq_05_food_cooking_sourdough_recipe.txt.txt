@@ -1,10 +1,10 @@
-and: 6
-sourdough: 3
-for: 3
-flour: 3
-the: 3
-starter: 2
-in: 2
-then: 2
-water: 2
-until: 2
+and: 6 (RTF: 0.214286)
+sourdough: 3 (RTF: 0.107143)
+for: 3 (RTF: 0.107143)
+flour: 3 (RTF: 0.107143)
+the: 3 (RTF: 0.107143)
+starter: 2 (RTF: 0.071429)
+in: 2 (RTF: 0.071429)
+then: 2 (RTF: 0.071429)
+water: 2 (RTF: 0.071429)
+until: 2 (RTF: 0.071429)

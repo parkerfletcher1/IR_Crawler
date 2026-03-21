@@ -1,6 +1,6 @@
-and: 7
-the: 3
-fever: 2
-clinician: 2
-symptom: 2
-were: 2
+and: 7 (RTF: 0.388889)
+the: 3 (RTF: 0.166667)
+fever: 2 (RTF: 0.111111)
+clinician: 2 (RTF: 0.111111)
+symptom: 2 (RTF: 0.111111)
+were: 2 (RTF: 0.111111)
