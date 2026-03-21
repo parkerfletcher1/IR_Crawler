@@ -1,0 +1,7 @@
+the: 14
+and: 7
+in: 2
+game: 2
+ball: 2
+team: 2
+to: 2

@@ -1,0 +1,4 @@
+and: 7
+heat: 2
+in: 2
+renewable: 2

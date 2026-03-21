@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Tokenizer {
-    private static HashMap<String, Integer> tokenFrequency = new HashMap<>();
     private static HashSet<String> englishWords = new HashSet<>();
     private static Map<String, Integer> sortedTokenFrequency;
 
@@ -29,21 +28,19 @@ public class Tokenizer {
         Tokenizer tokenizer = new Tokenizer();
         double startTime = System.currentTimeMillis();
         tokenizer.tokenize(Dir);
-        pruneTokens(tokenFrequency);
-        tokenizer.printTokenFrequencies(Tokenizer.tokenFrequency);
+        
         double endTime = System.currentTimeMillis();
         System.out.println("Tokenization time: " + ((endTime - startTime) / 1000.0) + " s");
-        Tokenizer.writeTokensToFile(sortedTokenFrequency, "token_frequencies.txt");
     }
 
-    private static void writeTokensToFile(Map<String,Integer> sortedTokenFrequency2, String string) {
+    private static void writeTokensToFile(Map<String, Integer> sortedTokenFrequency, String string) {
         try {
             File file = new File(string);
             if (!file.exists()) {
                 file.createNewFile();
             }
             Formatter formatter = new Formatter(file);
-            sortedTokenFrequency2.entrySet().stream().forEach(entry -> {
+            sortedTokenFrequency.entrySet().stream().forEach(entry -> {
                 formatter.format("%s: %d%n", entry.getKey(), entry.getValue());
             });
             formatter.close();
@@ -66,7 +63,7 @@ public class Tokenizer {
     }
 
     // method to print the token frequencies
-    private void printTokenFrequencies(HashMap<String, Integer> tokenFrequency) {
+    private Map<String, Integer> printTokenFrequencies(HashMap<String, Integer> tokenFrequency) {
 
         sortedTokenFrequency = tokenFrequency.entrySet()
                 .stream()
@@ -80,7 +77,11 @@ public class Tokenizer {
         sortedTokenFrequency.entrySet().stream().forEach(entry -> {
             System.out.printf("%s: %d%n", entry.getKey(), entry.getValue());
         });
-        System.out.println("Tokenization complete. Total tokens: " + sortedTokenFrequency.size());
+        return sortedTokenFrequency;
+    }
+
+    public Map<String, Integer> sortMap(HashMap<String,Integer> fileHashMap){
+       return printTokenFrequencies(fileHashMap);
     }
 
     /*
@@ -96,6 +97,9 @@ public class Tokenizer {
 
         for (File file : files) {
             if (file.isFile()) {
+
+                HashMap<String,Integer> fileSpecificHashMap = new HashMap<>();
+
                 System.out.println("Tokenizing file: " + file.getName());
                 String line = "";
                 BufferedReader br = new BufferedReader(new FileReader(file));
@@ -105,11 +109,15 @@ public class Tokenizer {
                     for (String token : tokens) {
                         token = Stemm(token);
                         if (!token.isEmpty() && englishWords.contains(token)) {
-                            tokenFrequency.put(token, tokenFrequency.getOrDefault(token, 0) + 1);
+                            fileSpecificHashMap.put(token, fileSpecificHashMap.getOrDefault(token, 0) + 1);
                         }
                     }
                 }
                 br.close();
+                pruneTokens(fileSpecificHashMap);
+                String outPutName = "freq_" + file.getName() + ".txt";
+                Map<String, Integer> sortedLocal = sortMap(fileSpecificHashMap);
+                writeTokensToFile(sortedLocal, outPutName);
             } else if (file.isDirectory()) {
                 // Recursively tokenize subdirectories
                 tokenize(file);

@@ -1,0 +1,10 @@
+and: 6
+sourdough: 3
+for: 3
+flour: 3
+the: 3
+starter: 2
+in: 2
+then: 2
+water: 2
+until: 2

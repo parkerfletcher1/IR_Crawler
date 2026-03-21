@@ -1,0 +1,6 @@
+and: 7
+the: 3
+fever: 2
+clinician: 2
+symptom: 2
+were: 2

@@ -1,0 +1,6 @@
+and: 7
+day: 3
+then: 2
+the: 2
+at: 2
+travel: 2

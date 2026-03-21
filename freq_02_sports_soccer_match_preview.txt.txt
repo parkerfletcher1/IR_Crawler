@@ -1,0 +1,5 @@
+the: 9
+and: 4
+corner: 2
+side: 2
+match: 2

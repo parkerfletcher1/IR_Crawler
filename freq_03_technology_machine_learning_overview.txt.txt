@@ -1,0 +1,10 @@
+and: 8
+data: 4
+learn: 3
+use: 2
+model: 2
+train: 2
+pattern: 2
+on: 2
+machine: 2
+to: 2

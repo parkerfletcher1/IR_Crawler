@@ -1,0 +1,9 @@
+and: 5
+down: 2
+fix: 2
+budget: 2
+include: 2
+cost: 2
+sav: 2
+variable: 2
+debt: 2
