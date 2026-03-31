@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 public class Tokenizer {
     private static HashSet<String> englishWords = new HashSet<>();
     private static Map<String, Integer> sortedTokenFrequency;
+    private static Map<String, Map<String, Integer>> invertedIndex = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
         /* checks arg length to ensure an argumement is provided */
@@ -31,6 +32,8 @@ public class Tokenizer {
         tokenizer.tokenize(Dir);
         double endTime = System.currentTimeMillis();
         System.out.println("Tokenization time: " + ((endTime - startTime) / 1000.0) + " s");
+
+        printTop10Docs("doctor");
 
     }
 
@@ -106,6 +109,11 @@ public class Tokenizer {
                 System.out.println("Tokenizing file: " + file.getName());
                 String line = "";
                 BufferedReader br = new BufferedReader(new FileReader(file));
+
+                StringBuilder currentDoc = new StringBuilder();
+                String currentDocName = null;
+                boolean inContent = false;
+
                 while ((line = br.readLine()) != null) {
                     // Convert to lowercase, remove punctuation, and split into tokens using regex.
                     String[] tokens = line.toLowerCase().split("\\s+");
@@ -115,7 +123,42 @@ public class Tokenizer {
                             fileSpecificHashMap.put(token, fileSpecificHashMap.getOrDefault(token, 0) + 1);
                         }
                     }
+
+                    // Start of a new document
+                    if (line.startsWith("WARC/1.0")) {
+
+                        if (currentDoc.length() > 0 && currentDocName != null) {
+                            processDocument(currentDoc.toString(), currentDocName);
+                        }
+
+                        currentDoc = new StringBuilder();
+                        currentDocName = null;
+                        inContent = false;
+                        continue;
+                    }
+
+                    // Extract document name (URL)
+                    if (line.startsWith("WARC-Target-URI:")) {
+                        currentDocName = line.substring(17).trim();
+                    }
+
+                    // Empty line separates headers from content
+                    if (line.trim().isEmpty()) {
+                        inContent = true;
+                        continue;
+                    }
+
+                    // Collect content
+                    if (inContent) {
+                        currentDoc.append(line).append(" ");
+                    }
                 }
+
+                // Process last document
+                if (currentDoc.length() > 0 && currentDocName != null) {
+                    processDocument(currentDoc.toString(), currentDocName);
+                }
+
                 br.close();
 
                 pruneTokens(fileSpecificHashMap);
@@ -130,8 +173,29 @@ public class Tokenizer {
         }
     }
 
-    // method to prune tokens by removing tokens that are too common, too rare,
-    // contain numbers, or are too short/long
+    private void processDocument(String text, String docName) {
+
+        HashMap<String, Integer> fileSpecificHashMap = new HashMap<>();
+
+        String[] tokens = text.toLowerCase().split("\\s+");
+
+        for (String token : tokens) {
+            token = Stemm(token);
+            if (!token.isEmpty() && englishWords.contains(token)) {
+                fileSpecificHashMap.put(token, fileSpecificHashMap.getOrDefault(token, 0) + 1);
+            }
+        }
+
+        pruneTokens(fileSpecificHashMap);
+
+        for (Map.Entry<String, Integer> entry : fileSpecificHashMap.entrySet()) {
+            String word = entry.getKey();
+            int count = entry.getValue();
+
+            invertedIndex.putIfAbsent(word, new HashMap<>());
+            invertedIndex.get(word).put(docName, count);
+        }
+    }
 
     private static HashMap<String, Integer> pruneTokens(HashMap<String, Integer> tokenFrequency) {
         tokenFrequency.entrySet().removeIf(entry -> entry.getValue() < 2 || entry.getValue() > 10000
@@ -171,4 +235,32 @@ public class Tokenizer {
         return rtfMap;
     }
 
+    public static List<Map.Entry<String, Integer>> getTop10Docs(String word) {
+        word = word.toLowerCase();
+
+        if (!invertedIndex.containsKey(word)) {
+            return new ArrayList<>();
+        }
+
+        return invertedIndex.get(word)
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .limit(10)
+                .collect(Collectors.toList());
+    }
+
+    public static void printTop10Docs(String word) {
+        List<Map.Entry<String, Integer>> results = getTop10Docs(word);
+
+        if (results.isEmpty()) {
+            System.out.println("Word not found.");
+            return;
+        }
+
+        System.out.println("Top documents for word: " + word);
+        for (Map.Entry<String, Integer> entry : results) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+    }
 }
